@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>중국 알리페이·위챗페이 결제 수수료 계산기 | 트래블로그 vs 트래블월렛 vs 일반카드</title>
+<meta name="description" content="중국 여행·유학 중 알리페이·위챗페이 결제 시 하나 트래블로그, 트래블월렛, 일반 신용카드의 실제 원화 결제 금액과 수수료를 실시간 환율로 비교하세요.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"알리페이 200위안 초과 결제 시 3% 수수료는 무엇인가요?","acceptedAnswer":{"@type":"Answer","text":"알리페이는 외국 카드로 1회 200위안을 넘게 결제하면 결제액의 약 3%를 추가 수수료로 부과하는 경우가 있습니다. 하나 트래블로그(유니온페이)는 이 수수료가 면제되는 혜택이 있습니다."}},
+{"@type":"Question","name":"결제를 나눠서 하면 정말 수수료를 아낄 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"1회 결제액을 200위안 이하로 나누면 3% 추가 수수료가 붙지 않아 절약할 수 있습니다. 다만 가맹점이나 앱 정책에 따라 분할 결제가 어려울 수 있습니다."}},
+{"@type":"Question","name":"트래블카드와 일반 신용카드는 무엇이 다른가요?","acceptedAnswer":{"@type":"Answer","text":"트래블카드는 환전수수료가 0%이거나 매우 낮고, 일반 카드는 1% 안팎의 국제브랜드 수수료와 해외서비스 수수료가 붙어 보통 1.2~2.5% 수준입니다."}},
+{"@type":"Question","name":"계산 결과가 실제 청구액과 다를 수 있나요?","acceptedAnswer":{"@type":"Answer","text":"네. 카드사 적용 환율, 결제 시점, 우대 이벤트에 따라 달라질 수 있어 참고용으로 사용하세요."}}
+]}
+</script>
+<style>
+:root{
+  --bg:#f2f4f6; --card:#fff; --ink:#191f28; --sub:#6b7684; --line:#e5e8eb;
+  --blue:#3182f6; --blue-bg:#e8f3ff; --green:#03a66d; --green-bg:#e6f7ef; --red:#f04452; --red-bg:#ffeeee;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#101215; --card:#1b1e23; --ink:#f2f4f6; --sub:#9aa4b2; --line:#2c3037; --blue-bg:#16263d; --green-bg:#0f2a1f; --red-bg:#3a1a1d}
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;line-height:1.55;padding:0 16px 48px}
+.wrap{max-width:720px;margin:0 auto}
+header{padding:36px 4px 20px}
+h1{font-size:1.55rem;line-height:1.35;margin:0 0 8px;letter-spacing:-.02em}
+header p{margin:0;color:var(--sub);font-size:.95rem}
+.card{background:var(--card);border-radius:20px;padding:22px;margin-bottom:14px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.card h2{font-size:1.05rem;margin:0 0 16px}
+.field{margin-bottom:16px}
+.field:last-child{margin-bottom:0}
+label{display:block;font-size:.85rem;color:var(--sub);margin-bottom:6px;font-weight:600}
+.inp{display:flex;align-items:center;background:var(--bg);border:2px solid transparent;border-radius:14px;padding:0 14px;transition:border-color .15s}
+.inp:focus-within{border-color:var(--blue)}
+.inp input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:1.15rem;font-weight:700;color:var(--ink);padding:14px 0;outline:none}
+.inp span{color:var(--sub);font-weight:600;margin-left:8px;white-space:nowrap}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.row2{grid-template-columns:1fr}}
+.note{font-size:.8rem;color:var(--sub);margin-top:8px;display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap}
+.note button{border:0;background:var(--blue-bg);color:var(--blue);font:inherit;font-weight:600;border-radius:8px;padding:2px 10px;cursor:pointer}
+.note button:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.res{border:2px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:10px}
+.res.best{border-color:var(--blue);background:var(--blue-bg)}
+.res-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.res-name{font-weight:700}
+.res-sub{font-size:.78rem;color:var(--sub)}
+.badge{font-size:.72rem;font-weight:700;background:var(--blue);color:#fff;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.total{font-size:1.6rem;font-weight:800;letter-spacing:-.02em;margin:10px 0 6px}
+.total small{font-size:.95rem;font-weight:600}
+.break{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.82rem;color:var(--sub)}
+.break b{color:var(--ink)}
+.diff{margin-top:8px;font-size:.82rem;font-weight:700;color:var(--red)}
+.best .diff,.diff.zero{color:var(--green)}
+.tip{background:var(--green-bg);border-radius:16px;padding:18px}
+.tip h3{margin:0 0 8px;font-size:1rem}
+.tip p{margin:4px 0;font-size:.9rem}
+.tip .big{color:var(--green);font-weight:800}
+.tip small{color:var(--sub);display:block;margin-top:8px;font-size:.76rem}
+.ad{margin:18px 0;border:1.5px dashed var(--line);border-radius:14px;min-height:90px;display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:.8rem;text-align:center;padding:10px}
+details{border-top:1px solid var(--line);padding:14px 0}
+details:first-of-type{border-top:0;padding-top:0}
+summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--sub);font-weight:400}
+details[open] summary::after{content:"−"}
+details p{margin:10px 0 0;color:var(--sub);font-size:.9rem}
+footer{color:var(--sub);font-size:.76rem;text-align:center;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>알리페이·위챗페이<br>어떤 카드가 제일 싸게 결제될까요?</h1>
+  <p>위안화 금액만 넣으면 카드별 실제 원화 결제액과 수수료를 바로 비교해 드려요.</p>
+</header>
+
+<main>
+<section class="card" aria-label="입력">
+  <h2>결제 정보</h2>
+  <div class="field">
+    <label for="amount">결제 금액</label>
+    <div class="inp"><input id="amount" type="number" inputmode="decimal" min="0" step="any" value="350"><span>CNY (위안)</span></div>
+  </div>
+  <div class="row2">
+    <div class="field">
+      <label for="rate">적용 환율 (1 CNY = ?원)</label>
+      <div class="inp"><input id="rate" type="number" inputmode="decimal" min="0" step="any" value="193"><span>원</span></div>
+    </div>
+    <div class="field">
+      <label for="fee">일반 카드 해외수수료율</label>
+      <div class="inp"><input id="fee" type="number" inputmode="decimal" min="0" step="any" value="1.25"><span>%</span></div>
+    </div>
+  </div>
+  <div class="note" id="rateNote" aria-live="polite">
+    <span id="rateStatus">환율을 불러오는 중이에요…</span>
+    <button type="button" id="reload">다시 불러오기</button>
+  </div>
+  <div class="note">네이버 고시환율과 소폭 차이 날 수 있어요. 환율은 직접 수정할 수 있어요.</div>
+</section>
+
+<section class="card" aria-label="비교 결과" aria-live="polite">
+  <h2>카드별 결제 금액 비교</h2>
+  <div id="results"></div>
+</section>
+
+<section id="tipBox" class="card" hidden></section>
+
+<div class="ad" aria-label="광고 영역">광고 배너 영역 (예: 320×100 / 반응형 광고 코드 삽입)</div>
+
+<section class="card" aria-label="자주 묻는 질문">
+  <h2>중국 결제·수수료 FAQ</h2>
+  <details>
+    <summary>알리페이 200위안 초과 결제 시 3% 수수료는 무엇인가요?</summary>
+    <p>알리페이는 외국 카드로 1회 200위안을 넘게 결제하면 결제액의 약 3%를 추가 수수료로 부과하는 경우가 있어요. 하나 트래블로그(유니온페이)는 이 수수료가 면제되는 혜택이 있어요. 정책은 바뀔 수 있으니 결제 전 앱 안내를 확인하세요.</p>
+  </details>
+  <details>
+    <summary>결제를 나눠서 하면 정말 수수료를 아낄 수 있나요?</summary>
+    <p>1회 결제액을 200위안 이하로 나누면 3% 추가 수수료가 붙지 않아 절약할 수 있어요. 다만 가맹점이나 앱 정책에 따라 분할 결제가 어려울 수 있어요.</p>
+  </details>
+  <details>
+    <summary>트래블카드와 일반 신용카드는 무엇이 다른가요?</summary>
+    <p>트래블카드는 환전수수료가 0%이거나 매우 낮고, 일반 카드는 국제브랜드 수수료와 해외서비스 수수료가 붙어 보통 1.2~2.5% 수준이에요. 카드사별 약관을 확인하세요.</p>
+  </details>
+  <details>
+    <summary>계산 결과가 실제 청구액과 다를 수 있나요?</summary>
+    <p>네. 카드사 적용 환율, 결제 시점, 이벤트 혜택에 따라 달라질 수 있어요. 이 계산기는 참고용이에요.</p>
+  </details>
+</section>
+</main>
+
+<footer>본 계산기는 참고용이며 실제 청구액과 다를 수 있습니다.</footer>
+</div>
+
+<script>
+(function(){
+  var FALLBACK = 193, LIMIT = 200, SURCHARGE = 0.03;
+  var $ = function(id){return document.getElementById(id)};
+  var amountEl=$('amount'), rateEl=$('rate'), feeEl=$('fee');
+  var won = function(n){return Math.round(n).toLocaleString('ko-KR')+'원'};
+
+  function num(el){var v=parseFloat(el.value);return isFinite(v)&&v>=0?v:0}
+
+  function calc(){
+    var A=num(amountEl), R=num(rateEl), f=num(feeEl)/100;
+    var over=A>LIMIT, s=over?SURCHARGE:0, base=A*R;
+    var cards=[
+      {name:'하나 트래블로그', sub:'유니온페이 · 환전 0% · 3% 면제', fx:0, sur:0},
+      {name:'트래블월렛 / 트래블카드', sub:'VISA·Master · 환전 0%', fx:0, sur:s},
+      {name:'일반 한국 카드', sub:'해외수수료 '+(f*100).toFixed(2).replace(/\.?0+$/,'')+'%', fx:f, sur:s}
+    ];
+    cards.forEach(function(c){
+      var afterSur=base*(1+c.sur);
+      c.surWon=afterSur-base;
+      c.fxWon=afterSur*c.fx;
+      c.total=afterSur+c.fxWon;
+    });
+    var min=Math.min.apply(null,cards.map(function(c){return c.total}));
+    var html=cards.map(function(c){
+      var d=c.total-min, best=d<0.5;
+      return '<div class="res'+(best?' best':'')+'"><div class="res-top"><div><div class="res-name">'+c.name+'</div><div class="res-sub">'+c.sub+'</div></div>'+(best?'<span class="badge">가장 저렴</span>':'')+'</div>'
+        +'<div class="total">'+won(c.total)+'</div>'
+        +'<div class="break"><span>원금 <b>'+won(base)+'</b></span><span>알리페이 3% <b>'+won(c.surWon)+'</b></span><span>카드 수수료 <b>'+won(c.fxWon)+'</b></span></div>'
+        +'<div class="diff'+(best?' zero':'')+'">'+(best?'최저 금액이에요':'+'+won(d)+' 더 나가요')+'</div></div>';
+    }).join('');
+    $('results').innerHTML=html;
+
+    var box=$('tipBox');
+    if(over && R>0){
+      var n=Math.ceil(A/LIMIT), each=A/n;
+      var save1=cards[1].total-base, save2=cards[2].total-base*(1+f);
+      box.hidden=false;
+      box.className='card tip';
+      box.innerHTML='<h3>꿀팁: 나눠서 결제하면 더 아껴요</h3>'
+        +'<p>'+A.toLocaleString('ko-KR')+'위안을 <b>'+n+'회</b>로 나눠 1회 약 <b>'+(Math.round(each*100)/100)+'위안</b> (200위안 이하)씩 결제하면</p>'
+        +'<p>트래블월렛 <span class="big">'+won(save1)+'</span> 절약 · 일반 카드 <span class="big">'+won(save2)+'</span> 절약</p>'
+        +'<small>하나 트래블로그는 원래 3%가 면제라 분할이 필요 없어요. 분할 결제 가능 여부는 가맹점마다 달라요.</small>';
+    } else { box.hidden=true; }
+  }
+
+  function setStatus(msg){$('rateStatus').textContent=msg}
+
+  function timeout(ms){var c=new AbortController();setTimeout(function(){c.abort()},ms);return c.signal}
+
+  async function loadRate(){
+    setStatus('환율을 불러오는 중이에요…');
+    var rate=null, date='';
+    try{
+      var r1=await fetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/cny.json',{signal:timeout(6000)});
+      var j1=await r1.json();
+      if(j1&&j1.cny&&j1.cny.krw){rate=j1.cny.krw;date=j1.date||''}
+    }catch(e){}
+    if(!rate){
+      try{
+        var r2=await fetch('https://open.er-api.com/v6/latest/CNY',{signal:timeout(6000)});
+        var j2=await r2.json();
+        if(j2&&j2.rates&&j2.rates.KRW){rate=j2.rates.KRW;date=(j2.time_last_update_utc||'').slice(5,16)}
+      }catch(e){}
+    }
+    if(rate){
+      rateEl.value=(Math.round(rate*100)/100);
+      setStatus('기준일 '+(date||'오늘')+' 환율을 반영했어요.');
+    }else{
+      rateEl.value=FALLBACK;
+      setStatus('환율을 불러오지 못해 기본값 '+FALLBACK+'원을 넣었어요. 직접 수정해 주세요.');
+    }
+    calc();
+  }
+
+  [amountEl,feeEl].forEach(function(el){el.addEventListener('input',calc)});
+  rateEl.addEventListener('input',function(){setStatus('직접 입력한 환율로 계산 중이에요.');calc()});
+  $('reload').addEventListener('click',loadRate);
+  calc();
+  loadRate();
+})();
+</script>
+</body>
+</html>
